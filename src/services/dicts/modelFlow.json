@@ -1,0 +1,25 @@
+{
+  "desc": [
+    "----- 这是一个翻译缓存文件 -----",
+    "----- 这是一个翻译缓存文件 -----",
+    "----- 这是一个翻译缓存文件 -----",
+    "如果您对翻译不满意可以在这里修改，在下次生成新的代码有效",
+    "注意：修改翻译后生成的代码或文件名，都随之变化，引用的地方也需要做对应的修改"
+  ],
+  "dict": [],
+  "cache": {
+    "idNames": {
+      "post_/app/create/": "create_app_app_create__post",
+      "post_/app/delete/": "delete_app_app_delete__post",
+      "post_/app/get_all/": "get_apps_app_get_all__post",
+      "post_/app/update/": "update_app_app_update__post",
+      "post_/stats/get_records/": "get_records_stats_get_records__post",
+      "post_/stats/get_tasks_stats/": "get_tasks_stats_stats_get_tasks_stats__post",
+      "post_/stats/get_tasks_list/": "get_tasks_list_stats_get_tasks_list__post",
+      "post_/create_task/": "create_task_create_task__post",
+      "post_/cancel_task/": "cancel_task_cancel_task__post"
+    },
+    "returnTypeNames": {},
+    "requestTypeNames": {}
+  }
+}

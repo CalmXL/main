@@ -1,0 +1,85 @@
+{
+  "desc": [
+    "----- 这是一个翻译缓存文件 -----",
+    "----- 这是一个翻译缓存文件 -----",
+    "----- 这是一个翻译缓存文件 -----",
+    "如果您对翻译不满意可以在这里修改，在下次生成新的代码有效",
+    "注意：修改翻译后生成的代码或文件名，都随之变化，引用的地方也需要做对应的修改"
+  ],
+  "dict": [
+    {
+      "en": "ApplicationManagement",
+      "zh": "应用管理"
+    },
+    {
+      "en": "AppliedStatistics",
+      "zh": "应用统计"
+    },
+    {
+      "en": "ConversationRecord",
+      "zh": "对话记录"
+    },
+    {
+      "en": "ModelManagement",
+      "zh": "模型管理"
+    },
+    {
+      "en": "SystemMonitoring",
+      "zh": "系统监控"
+    },
+    {
+      "en": "ThinkTagCompatibleInterface",
+      "zh": "ThinkTag兼容接口"
+    },
+    {
+      "en": "OpenAICompatibleInterface",
+      "zh": "OpenAI兼容接口"
+    },
+    {
+      "en": "AnthropicCompatibleInterface",
+      "zh": "Anthropic兼容接口"
+    },
+    {
+      "en": "APIKeyManagement",
+      "zh": "API密钥管理"
+    },
+    {
+      "en": "TokenUsageStatistics",
+      "zh": "Token使用统计"
+    },
+    {
+      "en": "QueueManagement",
+      "zh": "队列管理"
+    },
+    {
+      "en": "OpenCodeInterface",
+      "zh": "OpenCode 接口"
+    },
+    {
+      "en": "PlatformManagement",
+      "zh": "平台管理"
+    },
+    {
+      "en": "ProxyForwarding",
+      "zh": "代理转发"
+    },
+    {
+      "en": "ModelForwardingInterface",
+      "zh": "模型转发接口"
+    },
+    {
+      "en": "CertificationManagement",
+      "zh": "认证管理"
+    },
+    {
+      "en": "HuaweiCloudIPWhitelist",
+      "zh": "华为云IP白名单"
+    }
+  ],
+  "cache": {
+    "idNames": {},
+    "returnTypeNames": {},
+    "requestTypeNames": {},
+    "funcNameCache": []
+  }
+}

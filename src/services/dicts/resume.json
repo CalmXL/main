@@ -1,0 +1,52 @@
+{
+  "desc": [
+    "----- 这是一个翻译缓存文件 -----",
+    "----- 这是一个翻译缓存文件 -----",
+    "----- 这是一个翻译缓存文件 -----",
+    "如果您对翻译不满意可以在这里修改，在下次生成新的代码有效",
+    "注意：修改翻译后生成的代码或文件名，都随之变化，引用的地方也需要做对应的修改"
+  ],
+  "dict": [
+    {
+      "en": "Extraction",
+      "zh": "AI信息提取"
+    },
+    {
+      "en": "SystemMonitoring",
+      "zh": "系统监控"
+    },
+    {
+      "en": "ProMatching",
+      "zh": "项目匹配"
+    },
+    {
+      "en": "CandidateManagement",
+      "zh": "项目候选人管理"
+    },
+    {
+      "en": "DemandManagement",
+      "zh": "需求管理"
+    },
+    {
+      "en": "ResumeManagement",
+      "zh": "简历管理"
+    },
+    {
+      "en": "FileManagement",
+      "zh": "文件管理"
+    },
+    {
+      "en": "ResumeOperationRecord",
+      "zh": "简历操作记录"
+    },
+    {
+      "en": "PermissionManagement",
+      "zh": "权限管理"
+    }
+  ],
+  "cache": {
+    "idNames": {},
+    "returnTypeNames": {},
+    "requestTypeNames": {}
+  }
+}

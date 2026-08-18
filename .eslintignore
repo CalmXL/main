@@ -1,0 +1,6 @@
+/scripts
+build/*.js
+src/assets
+public
+dist
+*.d.ts

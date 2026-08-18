@@ -1,0 +1,14 @@
+{
+  "dayjs": "https://unpkg.com/dayjs@1.11.13/esm/index.js",
+  "lodash-es": "https://unpkg.com/lodash-es@4.17.21/lodash.js",
+  "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.13/vue.esm-browser.prod.js",
+  "axios": "https://unpkg.com/axios@1.11.0/dist/esm/axios.min.js",
+  "pinia": "https://cdnjs.cloudflare.com/ajax/libs/pinia/3.0.3/pinia.esm-browser.js",
+  "echarts": "https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.esm.min.js",
+  "jsencrypt": "https://unpkg.com/jsencrypt@3.5.4/lib/index.js",
+  "js-cookie": "https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.5/js.cookie.min.mjs",
+  "vue-router": "https://cdnjs.cloudflare.com/ajax/libs/vue-router/4.5.1/vue-router.esm-browser.min.js",
+  "vue-demi": "https://unpkg.com/vue-demi@0.14.10/lib/index.mjs",
+  "tslib": "https://cdn.jsdelivr.net/npm/tslib@2.8.1/tslib.es6.mjs",
+  "@vue/devtools-api": "https://unpkg.com/@vue/devtools-api@6.4.5/lib/esm/index.js"
+}

@@ -1,0 +1,1543 @@
+basePath: /
+definitions:
+  model.AddModelsRequest:
+    properties:
+      default_model_id:
+        type: integer
+      model_ids:
+        items:
+          type: integer
+        type: array
+    required:
+    - model_ids
+    type: object
+  model.Application:
+    description: 应用配置信息，用于管理不同的应用和其关联的模型
+    properties:
+      app_key:
+        description: 应用密钥，唯一
+        example: app_xxx
+        type: string
+      created_at:
+        description: 创建时间
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      description:
+        description: 应用描述
+        example: 这是一个测试应用
+        type: string
+      id:
+        description: 应用ID
+        example: 1
+        type: integer
+      is_enabled:
+        description: 是否启用
+        example: true
+        type: boolean
+      models:
+        description: 关联
+        items:
+          $ref: '#/definitions/model.ApplicationModel'
+        type: array
+      name:
+        description: 应用名称，唯一
+        example: 我的应用
+        type: string
+      updated_at:
+        description: 更新时间
+        example: "2023-01-01T00:00:00Z"
+        type: string
+    type: object
+  model.ApplicationConfig:
+    properties:
+      app_key:
+        type: string
+      default_model:
+        $ref: '#/definitions/model.ApplicationModelConfig'
+      models:
+        items:
+          $ref: '#/definitions/model.ApplicationModelConfig'
+        type: array
+    type: object
+  model.ApplicationModel:
+    properties:
+      application:
+        allOf:
+        - $ref: '#/definitions/model.Application'
+        description: 关联
+      application_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_default:
+        type: boolean
+      model:
+        $ref: '#/definitions/model.Model'
+      model_id:
+        type: integer
+    type: object
+  model.ApplicationModelConfig:
+    properties:
+      id:
+        type: integer
+      is_default:
+        type: boolean
+      model_name:
+        type: string
+      vendor:
+        type: string
+    type: object
+  model.ChatCompletionRequest:
+    description: OpenAI兼容的聊天完成请求参数
+    properties:
+      max_tokens:
+        description: 最大令牌数
+        example: 1000
+        type: integer
+      messages:
+        description: 消息列表，必填
+        items:
+          $ref: '#/definitions/model.Message'
+        type: array
+      model:
+        description: 模型名称，必填
+        example: gpt-4-turbo
+        type: string
+      stop:
+        description: 停止词列表
+        example:
+        - '["\n"'
+        - ' "Human:"'
+        - ' "AI:"]'
+        items:
+          type: string
+        type: array
+      stream:
+        description: 是否流式输出
+        example: false
+        type: boolean
+      temperature:
+        description: 温度参数，控制随机性
+        example: 0.7
+        type: number
+      top_k:
+        description: Top-k采样参数
+        example: 50
+        type: integer
+      top_p:
+        description: Top-p采样参数
+        example: 1
+        type: number
+    required:
+    - messages
+    - model
+    type: object
+  model.ChatCompletionResponse:
+    properties:
+      choices:
+        items:
+          $ref: '#/definitions/model.Choice'
+        type: array
+      created:
+        type: integer
+      id:
+        type: string
+      model:
+        type: string
+      object:
+        type: string
+      usage:
+        $ref: '#/definitions/model.Usage'
+    type: object
+  model.Choice:
+    properties:
+      delta:
+        $ref: '#/definitions/model.MessageDelta'
+      finish_reason:
+        type: string
+      index:
+        type: integer
+      message:
+        $ref: '#/definitions/model.Message'
+    type: object
+  model.CreateApplicationRequest:
+    description: 创建新应用的请求参数
+    properties:
+      app_key:
+        description: 应用密钥，可选，如果不提供则自动生成格式为'app_'开头的唯一标识。如果提供自定义值，系统会验证其唯一性
+        example: app_custom_key
+        type: string
+      default_model_id:
+        description: 默认模型ID，可选，必须是model_ids中的一个。如果提供了model_ids但没有指定默认模型，则第一个模型将作为默认模型
+        type: integer
+      description:
+        description: 应用描述，可选
+        example: 这是一个测试应用
+        type: string
+      model_ids:
+        description: 关联的模型ID列表，可选，创建应用时可以同时关联多个模型
+        items:
+          type: integer
+        type: array
+      name:
+        description: 应用名称，必填，唯一
+        example: 我的应用
+        type: string
+    required:
+    - name
+    type: object
+  model.CreateModelRequest:
+    description: 创建新模型的请求参数
+    properties:
+      api_key:
+        description: API密钥
+        example: sk-xxx
+        type: string
+      base_url:
+        description: API基础URL，必填
+        example: https://api.openai.com
+        type: string
+      context_size:
+        description: 上下文大小（tokens）
+        example: 128000
+        minimum: 0
+        type: integer
+      is_openai:
+        description: 是否兼容OpenAI API
+        example: true
+        type: boolean
+      model_name:
+        description: 模型名称，必填
+        example: gpt-4-turbo
+        type: string
+      model_type:
+        description: 模型类型，必填
+        example: chat
+        type: string
+      nickname:
+        description: 模型昵称
+        example: GPT-4 Turbo
+        type: string
+      vendor:
+        description: 模型厂商，必填
+        example: OpenAI
+        type: string
+    required:
+    - base_url
+    - model_name
+    - model_type
+    - vendor
+    type: object
+  model.DatabaseInfo:
+    properties:
+      stats:
+        additionalProperties: true
+        type: object
+      status:
+        type: string
+    type: object
+  model.ErrorDetail:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      type:
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        $ref: '#/definitions/model.ErrorDetail'
+    type: object
+  model.HealthResponse:
+    properties:
+      database:
+        type: string
+      status:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  model.ImportResult:
+    properties:
+      errors:
+        items:
+          type: string
+        type: array
+      failed:
+        type: integer
+      success:
+        type: integer
+      total:
+        type: integer
+    type: object
+  model.Message:
+    description: 聊天消息结构
+    properties:
+      content:
+        description: 消息内容
+        example: 你好
+        type: string
+      role:
+        description: 消息角色：system、user、assistant
+        example: user
+        type: string
+    required:
+    - content
+    - role
+    type: object
+  model.MessageDelta:
+    properties:
+      content:
+        type: string
+      role:
+        type: string
+    type: object
+  model.Model:
+    description: 大模型配置信息，包含模型的基本信息、API配置和状态
+    properties:
+      api_key:
+        description: API密钥
+        example: sk-xxx
+        type: string
+      applications:
+        description: 关联应用
+        items:
+          $ref: '#/definitions/model.ApplicationModel'
+        type: array
+      base_url:
+        description: 模型基础路径
+        example: https://api.openai.com
+        type: string
+      check_results:
+        description: 关联
+        items:
+          $ref: '#/definitions/model.ModelCheckResult'
+        type: array
+      context_size:
+        description: 上下文大小（tokens）
+        example: 128000
+        type: integer
+      created_at:
+        description: 创建时间
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      id:
+        description: 模型ID
+        example: 1
+        type: integer
+      is_available:
+        description: 是否可用
+        example: true
+        type: boolean
+      is_enabled:
+        description: 禁用启用状态
+        example: true
+        type: boolean
+      is_openai:
+        description: 是否符合OpenAI规范
+        example: true
+        type: boolean
+      model_name:
+        description: 模型名称
+        example: gpt-4-turbo
+        type: string
+      model_type:
+        description: 模型类型
+        example: chat
+        type: string
+      nickname:
+        description: 模型昵称
+        example: GPT-4 Turbo
+        type: string
+      updated_at:
+        description: 更新时间
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      vendor:
+        description: 模型厂商
+        example: OpenAI
+        type: string
+    type: object
+  model.ModelCheckResult:
+    properties:
+      checked_at:
+        type: string
+      created_at:
+        type: string
+      error_msg:
+        type: string
+      id:
+        type: integer
+      is_available:
+        type: boolean
+      model:
+        allOf:
+        - $ref: '#/definitions/model.Model'
+        description: 关联
+      model_id:
+        type: integer
+      response_time:
+        description: 响应时间，毫秒
+        type: integer
+    type: object
+  model.ModelInfo:
+    properties:
+      created:
+        type: integer
+      id:
+        type: string
+      object:
+        type: string
+      owned_by:
+        type: string
+    type: object
+  model.ModelsInfo:
+    properties:
+      available:
+        type: integer
+      enabled:
+        type: integer
+      total:
+        type: integer
+    type: object
+  model.ModelsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.ModelInfo'
+        type: array
+      object:
+        type: string
+    type: object
+  model.PageResponse:
+    description: 分页数据响应格式
+    properties:
+      list:
+        description: 数据列表
+      page:
+        description: 当前页码
+        example: 1
+        type: integer
+      page_size:
+        description: 每页大小
+        example: 20
+        type: integer
+      total:
+        description: 总记录数
+        example: 100
+        type: integer
+    type: object
+  model.Response:
+    description: API统一响应格式
+    properties:
+      code:
+        description: 响应状态码
+        example: 200
+        type: integer
+      data:
+        description: 响应数据
+      message:
+        description: 响应消息
+        example: 成功
+        type: string
+    type: object
+  model.SetDefaultModelRequest:
+    properties:
+      model_id:
+        type: integer
+    required:
+    - model_id
+    type: object
+  model.StatusResponse:
+    properties:
+      database:
+        $ref: '#/definitions/model.DatabaseInfo'
+      models:
+        $ref: '#/definitions/model.ModelsInfo'
+      system:
+        $ref: '#/definitions/model.SystemInfo'
+    type: object
+  model.SystemInfo:
+    properties:
+      go_version:
+        type: string
+      uptime:
+        type: string
+      version:
+        type: string
+    type: object
+  model.UpdateApplicationRequest:
+    description: 更新应用的请求参数，所有字段都是可选的
+    properties:
+      app_key:
+        description: 应用密钥，可选，如果提供会验证唯一性，确保不与其他应用冲突
+        example: new_app_key
+        type: string
+      default_model_id:
+        description: 默认模型ID，可选，必须是该应用已关联的模型ID之一
+        type: integer
+      description:
+        description: 应用描述，可选
+        example: 更新后的应用描述
+        type: string
+      name:
+        description: 应用名称，可选，如果提供会验证唯一性
+        example: 更新后的应用名称
+        type: string
+    type: object
+  model.UpdateApplicationStatusRequest:
+    properties:
+      is_enabled:
+        type: boolean
+    type: object
+  model.UpdateModelRequest:
+    properties:
+      api_key:
+        type: string
+      base_url:
+        type: string
+      context_size:
+        description: 上下文大小（tokens）
+        minimum: 0
+        type: integer
+      is_openai:
+        type: boolean
+      model_name:
+        type: string
+      model_type:
+        type: string
+      nickname:
+        type: string
+      vendor:
+        type: string
+    type: object
+  model.UpdateModelStatusRequest:
+    properties:
+      is_enabled:
+        type: boolean
+    type: object
+  model.Usage:
+    properties:
+      completion_tokens:
+        type: integer
+      prompt_tokens:
+        type: integer
+      total_tokens:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API支持团队
+    url: http://www.swagger.io/support
+  description: 基于Golang + Gin + MySQL的大模型管理服务API文档
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: 大模型管理服务 API
+  version: "1.0"
+paths:
+  /api/v1/applications:
+    get:
+      consumes:
+      - application/json
+      description: 分页获取应用列表，支持多种筛选和搜索方式。可以通过启用状态、关键字或精确的appKey进行筛选
+      parameters:
+      - default: 1
+        description: 页码，从1开始
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量，最大500
+        in: query
+        maximum: 500
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: 启用状态筛选，true=仅启用，false=仅禁用，不传=全部
+        in: query
+        name: is_enabled
+        type: boolean
+      - description: 关键字模糊搜索，会在应用名称、描述和appKey中搜索匹配的内容
+        example: '"测试"'
+        in: query
+        name: keyword
+        type: string
+      - description: 应用密钥精确查询，用于查找特定appKey的应用
+        example: '"app_1234567890abcdef"'
+        in: query
+        name: app_key
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功，返回分页的应用列表，包含总数、当前页等信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.PageResponse'
+              type: object
+        "400":
+          description: 请求参数错误，如页码或页面大小超出范围
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取应用列表
+      tags:
+      - 应用管理
+    post:
+      consumes:
+      - application/json
+      description: 创建一个新的应用配置。支持自定义appKey、关联模型和设置默认模型。如果不提供appKey则系统自动生成唯一标识。可以在创建时同时关联多个模型并指定默认模型
+      parameters:
+      - description: 应用信息。name为必填项，其他字段为可选。model_ids为要关联的模型ID列表，default_model_id为默认模型ID（必须在model_ids中）。如果提供model_ids但未指定default_model_id，则第一个模型将作为默认模型
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateApplicationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功，返回完整的应用信息。如果关联了模型，应用将立即可用于模型调用
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Application'
+              type: object
+        "400":
+          description: 请求参数错误，如appKey已存在、模型不存在、默认模型不在关联列表中等
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 创建新应用
+      tags:
+      - 应用管理
+  /api/v1/applications/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除应用配置
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 删除应用
+      tags:
+      - 应用管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取应用详细信息
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Application'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取应用详情
+      tags:
+      - 应用管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新应用配置信息。支持更新应用名称、描述、appKey和默认模型。更新appKey时会验证唯一性，更新默认模型时会验证该模型是否已关联到此应用
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新的应用信息。所有字段都是可选的，只更新提供的字段。default_model_id必须是该应用已关联的模型ID
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateApplicationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功，返回更新后的完整应用信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Application'
+              type: object
+        "400":
+          description: 请求参数错误，如appKey已存在、默认模型不在应用关联列表中等
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 更新应用信息
+      tags:
+      - 应用管理
+  /api/v1/applications/{id}/config:
+    get:
+      consumes:
+      - application/json
+      description: 获取应用的详细配置信息，包括关联的模型和默认模型
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.ApplicationConfig'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取应用配置信息
+      tags:
+      - 应用管理
+  /api/v1/applications/{id}/default-model:
+    put:
+      consumes:
+      - application/json
+      description: 为指定应用设置默认使用的模型
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 默认模型信息
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/model.SetDefaultModelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用或模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 设置应用默认模型
+      tags:
+      - 应用管理
+  /api/v1/applications/{id}/models:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定应用所关联的所有模型列表
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.ApplicationModel'
+                  type: array
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取应用关联的模型列表
+      tags:
+      - 应用管理
+    post:
+      consumes:
+      - application/json
+      description: 为指定应用添加一个或多个模型，可设置默认模型
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 添加的模型信息
+        in: body
+        name: models
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddModelsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 添加成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 为应用添加模型
+      tags:
+      - 应用管理
+  /api/v1/applications/{id}/models/{model_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 移除指定应用与模型的关联关系
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 模型ID
+        in: path
+        name: model_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 移除成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用或模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 移除应用模型关联
+      tags:
+      - 应用管理
+  /api/v1/applications/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: 启用或禁用指定应用
+      parameters:
+      - description: 应用ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 状态信息
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateApplicationStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 更新应用启用状态
+      tags:
+      - 应用管理
+  /api/v1/applications/key/{app_key}:
+    get:
+      consumes:
+      - application/json
+      description: 根据应用的唯一标识appKey获取应用详细信息。这是除了ID查询之外的另一种精确查询方式
+      parameters:
+      - description: 应用唯一标识密钥，格式通常为'app_'开头的字符串
+        example: '"app_1234567890abcdef"'
+        in: path
+        name: app_key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功，返回完整的应用信息包括关联的模型
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Application'
+              type: object
+        "400":
+          description: 请求参数错误，appKey不能为空
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 应用不存在，指定的appKey未找到对应的应用
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 通过AppKey获取应用详情
+      tags:
+      - 应用管理
+  /api/v1/models:
+    get:
+      consumes:
+      - application/json
+      description: 分页获取模型列表，支持筛选和搜索
+      parameters:
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      - description: 厂商筛选
+        in: query
+        name: vendor
+        type: string
+      - description: 模型类型筛选
+        in: query
+        name: model_type
+        type: string
+      - description: 启用状态筛选
+        in: query
+        name: is_enabled
+        type: boolean
+      - description: 关键字搜索
+        in: query
+        name: keyword
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.PageResponse'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取模型列表
+      tags:
+      - 模型管理
+    post:
+      consumes:
+      - application/json
+      description: 创建一个新的大模型配置
+      parameters:
+      - description: 模型信息
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateModelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Model'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 创建新模型
+      tags:
+      - 模型管理
+  /api/v1/models/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除模型配置
+      parameters:
+      - description: 模型ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 删除模型
+      tags:
+      - 模型管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取模型详细信息
+      parameters:
+      - description: 模型ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Model'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取模型详情
+      tags:
+      - 模型管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新模型配置信息
+      parameters:
+      - description: 模型ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新的模型信息
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateModelRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Model'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 更新模型信息
+      tags:
+      - 模型管理
+  /api/v1/models/{id}/check:
+    post:
+      consumes:
+      - application/json
+      description: 检查指定模型的API连接状态和响应时间
+      parameters:
+      - description: 模型ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 检查成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.ModelCheckResult'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 检查模型可用性
+      tags:
+      - 模型管理
+  /api/v1/models/{id}/check-history:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定模型的健康检查历史记录
+      parameters:
+      - description: 模型ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.ModelCheckResult'
+                  type: array
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取模型检查历史
+      tags:
+      - 模型管理
+  /api/v1/models/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: 启用或禁用指定模型
+      parameters:
+      - description: 模型ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 状态信息
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateModelStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/model.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "404":
+          description: 模型不存在
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 更新模型启用状态
+      tags:
+      - 模型管理
+  /api/v1/models/check-all:
+    post:
+      consumes:
+      - application/json
+      description: 检查系统中所有模型的API连接状态
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 检查完成
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 批量检查所有模型
+      tags:
+      - 模型管理
+  /api/v1/models/export:
+    get:
+      consumes:
+      - application/json
+      description: 将模型配置导出为Excel或CSV文件
+      parameters:
+      - default: xlsx
+        description: 导出格式
+        enum:
+        - xlsx
+        - csv
+        in: query
+        name: format
+        type: string
+      - description: 厂商筛选
+        in: query
+        name: vendor
+        type: string
+      - description: 模型类型筛选
+        in: query
+        name: model_type
+        type: string
+      - description: 启用状态筛选
+        in: query
+        name: is_enabled
+        type: boolean
+      produces:
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      - text/csv
+      responses:
+        "200":
+          description: 导出文件
+          schema:
+            type: file
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 批量导出模型
+      tags:
+      - 模型管理
+  /api/v1/models/import:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 通过Excel或CSV文件批量导入模型配置
+      parameters:
+      - description: 导入文件(Excel或CSV格式)
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 导入成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.ImportResult'
+              type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 批量导入模型
+      tags:
+      - 模型管理
+  /api/v1/models/template:
+    get:
+      consumes:
+      - application/json
+      description: 下载模型批量导入的Excel模板文件
+      produces:
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      responses:
+        "200":
+          description: 模板文件
+          schema:
+            type: file
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 获取导入模板
+      tags:
+      - 模型管理
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: 检查服务基本健康状态
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 服务正常
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.HealthResponse'
+              type: object
+        "503":
+          description: 服务不可用
+          schema:
+            $ref: '#/definitions/model.Response'
+      summary: 健康检查
+      tags:
+      - 系统监控
+  /status:
+    get:
+      consumes:
+      - application/json
+      description: 获取系统详细状态信息，包括数据库、模型统计等
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.StatusResponse'
+              type: object
+      summary: 系统状态检查
+      tags:
+      - 系统监控
+  /v1/chat/completions:
+    post:
+      consumes:
+      - application/json
+      description: 提供OpenAI兼容的聊天完成API，支持多厂商模型
+      parameters:
+      - description: 聊天请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChatCompletionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 聊天响应
+          schema:
+            $ref: '#/definitions/model.ChatCompletionResponse'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: OpenAI兼容聊天接口
+      tags:
+      - OpenAI兼容接口
+  /v1/models:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前应用可使用的模型列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 模型列表
+          schema:
+            $ref: '#/definitions/model.ModelsResponse'
+        "401":
+          description: 认证失败
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取可用模型列表
+      tags:
+      - OpenAI兼容接口
+securityDefinitions:
+  ApiKeyAuth:
+    description: 输入Bearer {token}格式的API密钥
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
